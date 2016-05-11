@@ -15,13 +15,82 @@ Options:
 """
 from docopt import docopt
 from collections import deque
+from colorama import Fore, Back, Style
 import random
 
-class MonoAlphaCipher:
+class Cipher:
+    """Cipher Base Class"""
+    
+    def __init__(self, arguments):
+        """Constructor"""
+        self.arguments = arguments
+        self.plaintext_file = self.arguments['<plaintext>']
+        self.ciphertext_file = self.arguments['<ciphertext>']
+        
+        self.alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                         'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    
+    def GenerateKey(self):
+        """Generate Key"""
+        self.key = list(deque(self.alphabet).rotate(-3))
+    
+    def GenerateKeymap(self):
+        """Generate Keymap"""
+        self.keymap = dict(zip(self.alphabet, self.key))
+        
+    def Encrypt(self):
+        """Encrypt Plaintext"""
+        plaintext = list(self.plaintext)
+        ciphertext = plaintext
+
+        # Perform replacement
+        index = 0
+        for letter in plaintext:
+            if letter.lower() in self.keymap:
+                ciphertext[index] = self.keymap[letter.lower()]
+
+            index += 1
+
+        self.ciphertext = "".join(ciphertext)
+    
+    def ReadPlaintext(self, plaintext_file):
+        """Read plaintext file into string"""
+        with open(plaintext_file, 'r') as ptf:
+            self.plaintext = ptf.read()
+    
+    def WriteCipherText(self, ciphertext_file):
+        """Write ciphertext to the file"""
+        with open(ciphertext_file, 'w') as ctf:
+            ctf.write(self.ciphertext)
+    
+    def Run(self):
+        """Run"""
+        self.ReadPlaintext(self.plaintext_file);
+        self.Encrypt();
+        self.WriteCipherText(self.ciphertext_file);
+        self.Print();
+        
+    def PrintPlaintext(self):
+        """Print Plaintext"""
+        print("PLAINTEXT\n")
+        print(Fore.GREEN + self.plaintext + Fore.RESET)
+    
+    def PrintCiphertext(self):
+        """Print Ciphertext"""
+        print("CIPHERTEXT\n")
+        print(Fore.RED + self.ciphertext + Fore.RESET)
+        
+    def Print(self):
+        """Print Plaintext and Ciphertext"""
+        self.PrintPlaintext();
+        self.PrintCiphertext();
+
+class MonoalphabeticCipher(Cipher):
     """Implements a monoalphabetic cipher"""
 
     def __init__(self, arguments):
         """Constructor"""
+        super().__init__(arguments);
         self.random = arguments['--random']
         self.shift = arguments['--caesar']
 
@@ -30,11 +99,9 @@ class MonoAlphaCipher:
         else:
             self.shift = 0;
 
-        self.alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-                         'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-
-        # Generate a key
+        # Generate a key and keymap
         self.GenerateKey()
+        self.GenerateKeymap()
 
     def GenerateKey(self):
         """Generate a random/shifted key"""
@@ -57,45 +124,10 @@ class MonoAlphaCipher:
 
         self.key = list(key)
 
-        # Generate lookup table (keymap)
-        self.keymap = dict(zip(self.alphabet, self.key))
-
-    def Encrypt(self, plaintext):
-        """Encrypt"""
-        self.plaintext = list(plaintext)
-        self.ciphertext = self.plaintext
-
-        # Perform replacement
-        index = 0
-        for letter in self.plaintext:
-            if letter.lower() in self.keymap:
-                self.ciphertext[index] = self.keymap[letter.lower()]
-
-            index += 1
-
-        return "".join(self.ciphertext)
-
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='0.1.0')
     # print(arguments)
 
-    # Get the plain/ciphertext file names
-    plaintext_file = arguments['<plaintext>']
-    ciphertext_file = arguments['<ciphertext>']
-
-    # Read plaintext file into string
-    with open(plaintext_file, 'r') as ptf:
-        plaintext = ptf.read()
-
-    # Instantiate a cipher (generates key)
-    cipher = MonoAlphaCipher(arguments)
-
-    # Encrypt the plaintext
-    ciphertext = cipher.Encrypt(plaintext)
-
-    print("PLAINTEXT\n" + plaintext)
-    print("CIPHERTEXT\n" + ciphertext)
-
-    # Write the ciphertext to the file
-    with open(ciphertext_file, 'w') as ctf:
-        ctf.write(ciphertext)
+    # Run the Monoalphabetic Cipher
+    cipher = MonoalphabeticCipher(arguments);
+    cipher.Run();
