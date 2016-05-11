@@ -65,12 +65,6 @@ class MonoAlphaCipher:
         self.plaintext = list(plaintext)
         self.ciphertext = self.plaintext
 
-        # print("Key:")
-        # print(self.key)
-        #
-        # print("Keymap:")
-        # print(self.keymap)
-
         # Perform replacement
         index = 0
         for letter in self.plaintext:
@@ -99,8 +93,8 @@ if __name__ == '__main__':
     # Encrypt the plaintext
     ciphertext = cipher.Encrypt(plaintext)
 
-    print("Plaintext: " + plaintext)
-    print("Ciphertext: " + ciphertext)
+    print("PLAINTEXT\n" + plaintext)
+    print("CIPHERTEXT\n" + ciphertext)
 
     # Write the ciphertext to the file
     with open(ciphertext_file, 'w') as ctf:
