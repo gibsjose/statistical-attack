@@ -53,21 +53,21 @@ class Cipher:
 
         self.ciphertext = "".join(ciphertext)
     
-    def ReadPlaintext(self, plaintext_file):
+    def ReadPlaintext(self):
         """Read plaintext file into string"""
-        with open(plaintext_file, 'r') as ptf:
+        with open(self.plaintext_file, 'r') as ptf:
             self.plaintext = ptf.read()
     
-    def WriteCipherText(self, ciphertext_file):
+    def WriteCipherText(self):
         """Write ciphertext to the file"""
-        with open(ciphertext_file, 'w') as ctf:
+        with open(self.ciphertext_file, 'w') as ctf:
             ctf.write(self.ciphertext)
     
     def Run(self):
         """Run"""
-        self.ReadPlaintext(self.plaintext_file);
+        self.ReadPlaintext();
         self.Encrypt();
-        self.WriteCipherText(self.ciphertext_file);
+        self.WriteCipherText();
         self.Print();
         
     def PrintPlaintext(self):
