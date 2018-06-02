@@ -65,10 +65,10 @@ class Cipher:
     
     def Run(self):
         """Run"""
-        self.ReadPlaintext();
-        self.Encrypt();
-        self.WriteCipherText();
-        self.Print();
+        self.ReadPlaintext()
+        self.Encrypt()
+        self.WriteCipherText()
+        self.Print()
         
     def PrintPlaintext(self):
         """Print Plaintext"""
@@ -82,22 +82,22 @@ class Cipher:
         
     def Print(self):
         """Print Plaintext and Ciphertext"""
-        self.PrintPlaintext();
-        self.PrintCiphertext();
+        self.PrintPlaintext()
+        self.PrintCiphertext()
 
 class MonoalphabeticCipher(Cipher):
     """Implements a monoalphabetic cipher"""
 
     def __init__(self, arguments):
         """Constructor"""
-        super().__init__(arguments);
+        super().__init__(arguments)
         self.random = arguments['--random']
         self.shift = arguments['--caesar']
 
         if self.shift:
             self.shift = int(self.shift)
         else:
-            self.shift = 0;
+            self.shift = 0
 
         # Generate a key and keymap
         self.GenerateKey()
@@ -129,5 +129,5 @@ if __name__ == '__main__':
     # print(arguments)
 
     # Run the Monoalphabetic Cipher
-    cipher = MonoalphabeticCipher(arguments);
-    cipher.Run();
+    cipher = MonoalphabeticCipher(arguments)
+    cipher.Run()
