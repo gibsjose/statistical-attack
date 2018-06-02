@@ -151,8 +151,8 @@ class StatisticalAttack:
         
     def Print(self):
         """Print Ciphertext and Plaintext"""
-        self.PrintCiphertext();
-        self.PrintPlaintext();
+        self.PrintCiphertext()
+        self.PrintPlaintext()
         
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='0.1.0')
